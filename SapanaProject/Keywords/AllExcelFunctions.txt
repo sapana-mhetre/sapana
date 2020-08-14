@@ -1,0 +1,84 @@
+*** Settings ***
+Library	Selenium2Library
+Library	../DataFile/ExcelLibrary.py
+Resource	../DataFile/Commonvariables.txt
+Resource	../Keywords/CommonActions.txt
+Library	Collections
+
+
+***	Variables	***
+		#Set Global Variable	${ID}	4
+		${Sheet1}	sheet1
+
+*** Keywords ***
+OpenExcelFunction
+	Open Excel	C:\\Automation\\Classic-Robot-Test-master\\SapanaProject\\DataFile\\TestData.xlsx
+	
+
+	
+Gettotalrowcount
+		${rowcount}	get_row_count	Sheet1
+		log	${rowcount}	warn
+		[Return]	${rowcount}
+		
+Gettotalcolumncount
+		${coulmncount}	get_column_count	Sheet1
+		[Return]	${coulmncount}
+		log	${coulmncount}	warn
+			
+FindcorrectTestcaseID	
+		[Arguments]		${ID}
+		${rowcount}	Gettotalrowcount	
+		:FOR    ${Row}    IN RANGE    0    ${rowcount}
+		\	${CellValue}	read_cell	${Row+1}	0	Sheet1
+		\	Exit For Loop If	${CellValue} == ${ID} 	
+		[Return]	${Row+1}
+		Log	${Row+1}	warn
+
+GetvalueofTestcaseId
+	[Arguments]		${ID}	
+	${corretctestcaseidrow}		FindcorrectTestcaseID	${ID}
+	${coulmncount}	Gettotalcolumncount
+	${dictionary}	Create Dictionary
+	:FOR    ${i}    IN RANGE 	${coulmncount}
+	\	${keyname}	read_cell	0		${i}		Sheet1						
+	\	${keyvalue}	read_cell	${corretctestcaseidrow}		${i}	Sheet1		
+	\	Set To Dictionary	${dictionary}	${keyname}	${keyvalue}	
+	#Log Dictionary	${dictionary}	warn
+	[Return]	${dictionary}
+			
+			
+
+Getcolumnc
+	${columns}		Get Column Count	Forms
+	log		${columns}
+
+Getrowc	
+	${Rows}		Get Row Count		Forms
+	log		${Rows}
+	
+FindTestcaseId
+		[Arguments]		${TestcaseID}
+		${Rows}		Getrowc
+		${Dict}		Create Dictionary
+	   :FOR	${rowno}	IN RANGE	1	${Rows}
+	/	${Testcase}	Read Cell Data By Coordinates	Forms	0	${rowno}
+	/	Exit loop if	${TestcaseID]}=${Testcase}
+	[Return]	${Testcase}
+
+Createdict
+		[Arguments]		${TestID}
+		${columns}	Getcolumnc
+		${Dict}		Create Dictionary	
+		${CorrectID}	FindTestcaseId		${TestID}
+		:FOR	${I}	IN RANGE	${columns}
+		\	${Key}	Read Cell Data By Coordinates	${I}	0	Forms
+		\	${Value}	Read Cell Data By Coordinates	${I}	${CorrectID}	Forms
+		\	Set To Dictionary	${Dict}		${key}	${value}	
+		[Return]		${Dict}
+				
+			
+			
+			
+			
+			

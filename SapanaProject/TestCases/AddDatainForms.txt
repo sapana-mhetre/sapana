@@ -1,0 +1,31 @@
+*** Settings *** 
+Resource	../DataFile/Commonvariables.txt
+Library	../DataFile/ExcelLibrary.py	
+Resource	../Keywords/AllExcelFunctions.txt
+Resource	../Keywords/CommonActions.txt
+
+*** Test Cases ***
+Add data in Practice Forms
+	${Dict}		Create Dictionary
+	Openchromebrowser	${Url}
+	Execute JavaScript		window.scrollTo(0,700)
+	Wait Until Page Contains Element	//*[@class='header-text' and text()='Forms']		20s		icon is not displayed
+	Click Element	//*[@class='header-text' and text()='Forms']
+	Wait Until Page Contains Element	//span[@class='text' and text()='Practice Form']		20s		Practice form is not displayed
+	Click Element	//span[@class='text' and text()='Practice Form']
+	Wait Until Page Contains Element	//*[@class='main-header' and text()='Practice Form']		20s		Practice page is not displayed
+	OpenExcelFunction
+	${Dict}		Createdict	1001
+	${Fname}	Get From Dictionary		${Dict}		${FirstName}
+	${Lname}	Get From Dictionary		${Dict}		${LastName}
+	${Email}	Get From Dictionary		${Dict}		${Email}
+	${Gender}	Get From Dictionary		${Dict}		${Gender}
+	${DOB}	Get From Dictionary		${Dict}		${DOB}
+	${Subjects}	Get From Dictionary		${Dict}		${Subjects}
+	${Hobbies}	Get From Dictionary		${Dict}		${Hobbies}
+	${Current Address}	Get From Dictionary		${Dict}		${Current Address}
+	${Picture}	Get From Dictionary		${Dict}		${Picture}
+	${City}	Get From Dictionary		${Dict}		${City}
+	
+	
+	Input Text	//*[@id='firstName']	${Fname}		

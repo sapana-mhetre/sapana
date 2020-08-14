@@ -1,0 +1,50 @@
+*** Settings ***
+Resource	../DataFile/Commonvariables.txt
+Resource	../Keywords/CommonActions.txt
+Library	../DataFile/ExcelLibrary.py
+Resource	../Keywords/dummy.txt
+
+
+*** Test Cases ***
+
+
+Add data in Web Table
+		Openchromebrowser	${Url}
+		Wait Until Page Contains Element	${WebTablesElement}		30seconds	WebTable is availble on page
+		Click Element	${WebTablesElement}
+		Wait Until Page Contains Element	${Addbutton}	20seconds	Addbutton is availble on page
+		Click Element	${Addbutton}
+		Wait Until Element Is Visible	${Registration form}	30s		popup is not displayed
+		OpenExcelFunctionnew
+		${dictionary}	Createdictionaryforexceldata	101
+		${FirstName}	Get From Dictionary		${dictionary}	First Name
+		${LastName}	Get From Dictionary		${dictionary}	Last Name
+		${Emailfield}	Get From Dictionary		${dictionary}	Email
+		${Agefield}	Get From Dictionary		${dictionary}	Age
+		${Salaryfield}	Get From Dictionary		${dictionary}	Salary
+		${Departmentfield}	Get From Dictionary		${dictionary}	Department
+		
+		Input Text	${Fname}	${FirstName}
+		Input Text	${Lname}	${LastName}
+		Input Text	${Email}	${Emailfield}
+		${Agenumber}	Convert To String	${Agefield}
+		
+		Input Text	${Age}	${Agenumber}
+		
+#		${Salarynumber}	Convert To String	${Salaryfield}
+		
+		Input Text	${Salary}	${Salaryfield}
+		Input Text	${Department}	${Departmentfield}
+		Click Element	${Submitbutton}	
+		Wait Until Page Contains Element	${firstnameverify}	10seconds	Firstname is verified in WebTable
+
+Verify Edit button functionality
+		Click Element	${Editbutton}	
+		Wait Until Page Contains Element	//*[@id='registration-form-modal']	20seconds	Registration form page is displayed
+		
+		Textfield Value Should Be	//*[@id='lastName']		Dixit 
+		Click Element	${closeicon}
+		Click Element	${deleterecord}
+		
+
+	
