@@ -1,0 +1,3 @@
+*** Keywords ***
+Declare Global Variables
+	Set Global Variable		${checkboxmessage}	home desktop notes commands documents workspace reactangular veu office public private classified general downoads wordFile excelFile

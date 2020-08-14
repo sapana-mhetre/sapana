@@ -1,0 +1,53 @@
+*** Settings ***
+Library		Selenium2Library
+Library		../DataFile/ExcelLibrary.py
+Resource	../DataFile/Commonvariables.txt
+Resource	../Keywords/CommonActions.txt
+Library		Collections
+#Resource	../DataFile/AllGlobalvariables.txt
+#Library		Screenshot
+#Library		../DataFile/library.py 
+#Library		../DataFile/Screenshot.py
+Library		OperatingSystem
+
+*** Keywords ***
+OpenExcelFunctionnew
+	Open Excel	${TestDataExcelsheet}
+
+GetCountOfColumns
+	
+	
+	${columncount}	get_column_count	Webtable
+	log	${columncount}	warn
+	[return]	${columncount}
+
+
+GetCountOfRows
+	
+	${rowcount}	get_row_count		Webtable
+	log	${rowcount}	warn
+	[return]	${rowcount}
+
+Createdictionaryforexceldata
+	[Arguments]	${ID}
+	${columncount}	GetCountOfColumns
+	${rowno}		GetIDrowNUMBER	${ID}
+	${dictionary}	Create Dictionary	
+	Open Excel	${TestDataExcelsheet}
+	:FOR  ${col}  IN RANGE	0	${columncount-1}
+	\	${Key}	Read Cell Data By Coordinates	Webtable	${col+1}	0	
+	\	${Value}	Read Cell Data By Coordinates	Webtable	${col+1}	${rowno}	
+	\ 	Log	${Key} | ${Value}	warn
+	\	Set To Dictionary	${dictionary}	${Key}	${Value}
+	[return]	${dictionary}	
+
+GetIDrowNUMBER
+	[Arguments]	${ID}
+	${rowcount}		GetCountOfRows	
+#	Open Excel	${path}
+	:FOR  ${row}  IN RANGE	0	${rowcount}
+	\	${testcaseID}	Read Cell Data By Coordinates	Webtable	0	${row+1}
+	\	 Exit For Loop IF   ${testcaseID} == ${ID}
+	[return]	${row}
+
+	

@@ -1,0 +1,11 @@
+*** Settings ***
+Resource	../DataFile/Commonvariables.txt
+Resource	../Keywords/CommonActions.txt
+Library	../DataFile/ExcelLibrary.py
+Resource	../Keywords/AllExcelFunctions.txt
+
+*** Test cases ***
+Testcase to open excel and get count
+	OpenExcelFunction
+	FindcorrectTestcaseID	4
+	GetvalueofTestcaseId	4

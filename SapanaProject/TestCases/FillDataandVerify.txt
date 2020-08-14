@@ -1,0 +1,24 @@
+*** Settings ***
+Resource	../DataFile/Commonvariables.txt
+Resource	../Keywords/CommonActions.txt
+Library	../DataFile/ExcelLibrary.py
+
+
+
+*** Test Cases ***
+Fill Data and Verify
+		Open Excel	${TestDataExcelsheet}
+		${FullName}		read_cell	1	1	Sheet1
+		Log	${FullName}	warn
+        Input Text	${FullnameFiled}	${FullName}
+		
+		${Email}		read_cell	1	2	Sheet1
+		Input Text	${EmailidField}	${Email}
+		
+		${CurrentAddress}		read_cell	1	3	Sheet1
+		Input Text	${CurrentAddressField}	${CurrentAddress}
+		
+		Click Button	${Submitbutton}
+		
+		Execute JavaScript    window.scrollTo(0,700)
+		Wait Until Page Contains Element	${Output_Fullname}	10seconds	Verification is failed on submit application page

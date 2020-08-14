@@ -1,0 +1,39 @@
+*** Settings ***
+Library	Selenium2Library
+Resource	../Keywords/CommonActions.txt
+Resource	../Keywords/AllExcelFunctions.txt
+#Resource	../DataFile/AllGlobalvariables.txt
+Library		../DataFile/ExcelLibrary.py
+Resource	../DataFile/Commonvariables.txt
+
+*** Keywords ***
+Openchromebrowser
+	[Arguments]	${Url}
+	Open Browser	${Url} 	Chrome 	desired_capabilities=ignoreProtectedModeSettings:True
+	Maximize Browser Window
+
+
+Filldatafromexcel
+	[Arguments]		${ID1}
+	OpenExcelFunction
+#	${dictionary}	Create Dictionary
+	${dictionary}	GetvalueofTestcaseId	4
+	${Name}	Get From Dictionary    ${dictionary}    Full Name
+	${Email}	Get From Dictionary    ${dictionary}    Email
+	${Address}	Get From Dictionary    ${dictionary}    Current Address
+#	Log		${Name} ${Email} ${Address}		warn
+	Input Text	${FullnameFiled}	${Name}
+	Input Text	${EmailidField}	${Email}
+	Input Text	${CurrentAddressField}	${Address}
+	Click Button	${Submitbutton}
+	Execute JavaScript    window.scrollTo(0,700)
+	
+ClosebrowserAfterRun
+	Close Browser
+	
+	
+	
+	
+
+
+
